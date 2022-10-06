@@ -1,96 +1,108 @@
-//Inicializaciopn de variabes 
-let tarjetasDestapadas = 0; 
-let tarjeta1 = null;
-let tarjeta2 = null;
-let primerResultado = null; 
-let segundoResultado = null; 
-let movimientos = 0; 
-let aciertos = 0; 
-let timer = 30; 
-let temporizador = false; 
-let tiempoRegresivoId = null; 
+//Inicialización de variabes 
+let flipCards = 0; 
+let card1 = null;
+let card2 = null;
+let renderFirst = null; 
+let renderSecond = null; 
+let moves = 0; 
+let hits = 0; 
+let time = 30; 
+let timer = false; 
+let countDown = null; 
+let started = false;
 //apuntando a documento html 
-let mostrarMovimientos = document.getElementById('movimientos')
-let mostrarAciertos = document.getElementById('aciertos')
-let tRestante = document.getElementById('t-restante')
-
-console.log(mostrarMovimientos);
-console.log(mostrarAciertos);
-console.log(tRestante);
+let showMoves = document.getElementById('moves')
+let showHits = document.getElementById('hits')
+let timeLeft = document.getElementById('time-left')
 
 //arreglos de números
-let numeros = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8]; 
+let elements = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8]; 
 
-numeros =numeros.sort(() =>Math.random()-0.5)
-console.log(numeros)
- function contarTiempo(){
+elements =elements.sort(() =>Math.random()-0.5)
+ function measureTime(){
 
-    tiempoRegresivoId = setInterval(() =>{
-        timer --;
-        tRestante.innerHTML = `Tiempo: ${timer}`
+    countDown = setInterval(() =>{
+        time --;
+        timeLeft.innerHTML = `Tiempo: ${time}`
 
-        if(timer ==0){
-            clearInterval(tiempoRegresivoId); 
-            bloquearTarjetas(); 
+        if(time ==0){
+            clearInterval(countDown); 
+            blockCards(); 
         }
     }, 1000);
 }
 
-function bloquearTarjetas(){
-    for(let i = 0; i < 15; i ++){
-    let tarjetaBloqueada = document.getElementById(i);
-    tarjetaBloqueada.innerHTML = numeros[i];
-    tarjetaBloqueada.disabled = true; 
+startGame = () =>{
+    if(!started){
+
+        blockCards(); 
+        setTimeout(() =>{
+            unBlockCards(); 
+            measureTime();
+        }, 1000);
+        started = true;
+    }
+};
+
+
+function blockCards(){
+    for(let i = 0; i < 16; i ++){
+    let blockedCard = document.getElementById(i);
+    blockedCard.innerHTML = elements[i];
+    blockedCard.disabled = true; 
     }
 }
-function destapar(id){
-
-    if(temporizador == false){
-        contarTiempo(); 
-        temporizador = true;
+function unBlockCards(){
+    for(let i = 0; i < 16; i ++){
+    let blockedCard = document.getElementById(i);
+    blockedCard.innerHTML = ' ';
+    blockedCard.disabled = false; 
     }
-    tarjetasDestapadas ++; //
-    console.log(tarjetasDestapadas)
+}
 
-    if(tarjetasDestapadas == 1){
+function showCard(id){
+    startGame();
+ 
+    flipCards ++; //
+
+    if(flipCards == 1){
         //mostrar el primer número
-    tarjeta1 = document.getElementById(id); 
-    tarjeta1.innerHTML = numeros[id]; 
+    card1 = document.getElementById(id); 
+    card1.innerHTML = elements[id]; 
     //deshabilitar el primer boton 
-    tarjeta1.disabled = true; 
-    primerResultado = numeros[id]; 
-    }else if(tarjetasDestapadas == 2){ 
+    card1.disabled = true; 
+    renderFirst = elements[id]; 
+    }else if(flipCards == 2){ 
         //mostrar el segundo boton
 
-        tarjeta2 = document.getElementById(id); 
-        segundoResultado = numeros[id];
-        tarjeta2.innerHTML = segundoResultado; 
+        card2 = document.getElementById(id); 
+        renderSecond = elements[id];
+        card2.innerHTML = renderSecond; 
 
         //Deshabilitar el boton 
-        tarjeta2.disabled = true; 
+        card2.disabled = true; 
         //incrementar ficha de movimientos 
-        movimientos ++; 
-        console.log(movimientos)
-        mostrarMovimientos.innerHTML = `Movimientos : ${movimientos}`
-        if(primerResultado == segundoResultado) {
-            tarjetasDestapadas = 0; 
+        moves ++; 
+        showMoves.innerHTML = `Movimientos: ${moves}`
+        if(renderFirst == renderSecond) {
+            flipCards = 0; 
             
-            //aumentar aciertos 
-            aciertos++; 
-            mostrarAciertos.innerHTML = `Aciertos: ${aciertos}`
+            //aumentar Aciertos 
+            hits++; 
+            showHits.innerHTML = `Aciertos: ${hits}`
 
-            if(aciertos == 8){
-                mostrarAciertos.innerHTML += '<p>Juego finalizado</p>'
+            if(hits == 8){
+                showHits.innerHTML += '<p>¡Felicidades ganaste!</p>'
             }
         }else{
             //mostrar momentaneamente valores y tapar nuevamente 
 
             setTimeout(() =>{
-                tarjeta1.innerHTML = ' '
-                tarjeta2.innerHTML = ' '
-                tarjeta1.disabled = false; 
-                tarjeta2.disabled = false; 
-                tarjetasDestapadas = 0; 
+                card1.innerHTML = ' '
+                card2.innerHTML = ' '
+                card1.disabled = false; 
+                card2.disabled = false; 
+                flipCards = 0;       
             },1000)
         }
     }
