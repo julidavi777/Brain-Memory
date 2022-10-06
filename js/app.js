@@ -14,13 +14,13 @@ let started = false;
 let showMoves = document.getElementById('moves')
 let showHits = document.getElementById('hits')
 let timeLeft = document.getElementById('time-left')
+let statusGame = document.getElementById('status')
 
 //arreglos de números
 let elements = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8]; 
 
 elements =elements.sort(() =>Math.random()-0.5)
  function measureTime(){
-
     countDown = setInterval(() =>{
         time --;
         timeLeft.innerHTML = `Tiempo: ${time}`
@@ -32,7 +32,7 @@ elements =elements.sort(() =>Math.random()-0.5)
     }, 1000);
 }
 
-startGame = () =>{
+let startGame = () =>{
     if(!started){
 
         blockCards(); 
@@ -41,6 +41,7 @@ startGame = () =>{
             measureTime();
         }, 1000);
         started = true;
+        endGame(); 
     }
 };
 
@@ -91,9 +92,7 @@ function showCard(id){
             hits++; 
             showHits.innerHTML = `Aciertos: ${hits}`
 
-            if(hits == 8){
-                showHits.innerHTML += '<p>¡Felicidades ganaste!</p>'
-            }
+         
         }else{
             //mostrar momentaneamente valores y tapar nuevamente 
 
@@ -103,7 +102,16 @@ function showCard(id){
                 card1.disabled = false; 
                 card2.disabled = false; 
                 flipCards = 0;       
-            },1000)
+            },700)
         }
     }
+}
+function endGame(){
+    setTimeout(() =>{
+        if(hits == 8){
+            statusGame.innerHTML += '<h2 class="win status">¡Felicidades ganaste!</h2>'
+        }else{
+            statusGame.innerHTML += '<h2 class="lost status">Perdiste, sigue Intentando</h2>'
+        }
+    },31000);
 }
