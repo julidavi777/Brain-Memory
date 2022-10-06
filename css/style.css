@@ -4,11 +4,22 @@ body{
     font-family: sans-serif;
     color: white;
 }
+
 main{
     width: 730px;
     margin: 100px auto 50px;
     display: flex;
     align-items: center;
+}
+.status{
+    width: 50vw;
+    padding: 3px 0; 
+    margin: auto;
+    background: #fff;
+    color: black;;
+    text-align: center;
+    border-radius: 10px;
+
 }
 .section1{
     background-color: rgba(255,255,255,0.2);
@@ -17,6 +28,17 @@ main{
 }
 h1{
     text-align: center;;
+}
+
+h2{
+    margin: 0;
+}
+.lost{
+    color: rgba(255, 0, 0, 0.575);
+}
+.win{
+    color: green;
+    background-color: rgba(255,255,255,0.7);
 }
 button{
     height: 100px;
